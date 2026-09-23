@@ -28,17 +28,22 @@ onUnmounted(() => clearInterval(galleryTimer))
 <template>
   <Transition name="loader"><div v-if="!loaded" class="loader-screen"><div class="office-loader"><div class="building-name">BURNOUT INC.</div><div class="office-windows"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="office-door"><span>9–5</span></div><div class="walk-cycle" aria-label="BurnoutHorse walking into the office"><img src="/burnout-walk.png" alt="" /><img src="/burnout-walk-2.png" alt="" /><img src="/burnout-walk-3.png" alt="" /></div><div class="street-line"></div></div><div class="loader-copy"><span>07:59:57</span><p>HERE WE GO AGAIN.</p></div></div></Transition>
   <main>
-    <header>
-      <a class="brand" href="#top"><span>BH</span><strong>BURNOUT<br />HORSE</strong></a>
-      <nav :class="{ open: menuOpen }" @click="menuOpen = false"><a href="#story">Story</a><a href="#routine">Daily grind</a><a href="#review">Performance review</a></nav>
-      <button class="menu" aria-label="Open menu" @click="menuOpen = !menuOpen">MENU</button>
+    <header class="shift-nav">
+      <a class="employee-badge" href="#top" aria-label="BurnoutHorse home"><img class="badge-photo" src="/burnout-logo.png" alt="" /><span class="badge-copy"><small>EMPLOYEE #0001</small><strong>BURNOUT<br />HORSE</strong></span><i></i></a>
+      <button class="menu" aria-label="Open shift menu" @click="menuOpen = !menuOpen"><span>SHIFT MENU</span><i></i></button>
+      <nav :class="{ open: menuOpen }" @click="menuOpen = false">
+        <span class="nav-label">TODAY'S AGENDA</span>
+        <a href="#story"><b>01</b><span>THE EMPLOYEE</span></a>
+        <a href="#routine"><b>02</b><span>DAILY GRIND</span></a>
+        <a href="#review"><b>03</b><span>THE REVIEW</span></a>
+      </nav>
     </header>
     <section id="top" class="hero">
       <img class="hero-bg" src="/hero-hoof.png" alt="BurnoutHorse leaving the financial district after work" /><div class="hero-overlay"></div><div class="hero-copy">
-        <p class="overline">A VERY TIRED HORSE ON THE INTERNET</p><h1>BURNOUT<br /><em>HORSE</em></h1><p class="hero-line">He had dreams once.<br />Now he has calendar invites.</p>
-        <div class="hero-bottom"><a class="main-cta" href="#routine">WATCH HIS DAY <span>↓</span></a><div class="socials" aria-label="Social links"><a href="#" aria-label="X"><svg viewBox="0 0 24 24"><path d="M5 4l14 16M19 4L5 20" /></svg></a><a href="#" aria-label="Telegram"><svg viewBox="0 0 24 24"><path d="M3 11l17-7-4 16-5-5-3 3 1-5z" /></svg></a><a href="#" aria-label="Dexscreener"><svg viewBox="0 0 24 24"><path d="M4 18l5-6 4 3 7-9M4 5v14h16" /></svg></a></div></div>
+        <h1>BURNOUT<br /><em>HORSE</em></h1><p class="hero-line">He had dreams once.<br />Now he has calendar invites.</p>
+        <div class="hero-bottom"><a class="main-cta" href="#routine">WATCH HIS DAY <span>↓</span></a></div>
       </div>
-      <div class="hero-stamp">MON–FRI<br /><strong>BARELY</strong></div>
+      <div class="hero-stamp">MON–FRI<br /><strong>BARELY</strong></div><div class="floating-socials" aria-label="Social links"><span>FIND HIM</span><a href="#" aria-label="X"><img src="/x-logo.svg" alt="" /></a><a href="#" aria-label="Telegram"><img src="/telegram-logo.svg" alt="" /></a></div>
       <div class="hero-ticker"><div><span>WORK • NAP • REPEAT •</span><span>WORK • NAP • REPEAT •</span><span>WORK • NAP • REPEAT •</span></div></div>
     </section>
     <section id="story" class="story"><div class="story-tag">MEET THE EMPLOYEE</div><div class="story-title"><span>01</span><h2>Just a horse.<br />With a <em>job.</em></h2></div><div class="story-copy"><p>BurnoutHorse used to run free. Then someone offered dental insurance and a suspiciously “competitive” salary.</p><p>Now he spends his days answering emails that could have been a nap. He is not a hero. He is us.</p></div><div class="quote">“Can we circle back<br />after my breakdown?”</div></section>
