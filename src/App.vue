@@ -1,10 +1,13 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import HeroAtmosphere from './components/HeroAtmosphere.vue'
 
 const loaded = ref(false)
 const menuOpen = ref(false)
 const activeScene = ref(0)
 let galleryTimer
+let introTimer
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
 
 const scenes = [
   { time: '06:12', title: 'The commute', note: 'Two buses. One coffee. Zero enthusiasm.', image: '/routine-commute.png' },
@@ -19,17 +22,30 @@ const selectScene = index => {
   galleryTimer = setInterval(() => activeScene.value = (activeScene.value + 1) % scenes.length, 4500)
 }
 onMounted(() => {
-  setTimeout(() => loaded.value = true, 3600)
+  Promise.all(['/hero-afterhours.png', '/burnout-logo.png'].map(src => new Promise(resolve => { const img = new Image(); img.onload = resolve; img.onerror = resolve; img.src = src }))).then(() => {
+    if (reducedMotion) loaded.value = true
+    else introTimer = setTimeout(() => loaded.value = true, 2800)
+  })
   galleryTimer = setInterval(() => activeScene.value = (activeScene.value + 1) % scenes.length, 4500)
 })
-onUnmounted(() => clearInterval(galleryTimer))
+onUnmounted(() => { clearInterval(galleryTimer); clearTimeout(introTimer) })
 </script>
 
 <template>
-  <Transition name="loader"><div v-if="!loaded" class="loader-screen"><div class="office-loader"><div class="building-name">BURNOUT INC.</div><div class="office-windows"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="office-door"><span>9–5</span></div><div class="walk-cycle" aria-label="BurnoutHorse walking into the office"><img src="/burnout-walk.png" alt="" /><img src="/burnout-walk-2.png" alt="" /><img src="/burnout-walk-3.png" alt="" /></div><div class="street-line"></div></div><div class="loader-copy"><span>07:59:57</span><p>HERE WE GO AGAIN.</p></div></div></Transition>
+  <Transition name="intro">
+    <div v-if="!loaded" class="intro-screen">
+      <div class="simple-loader" aria-label="Loading another day at work">
+        <img src="/burnout-logo.png" alt="" />
+        <span>BURNOUT INC. · 05:55 AM</span>
+        <h2>ANOTHER DAY<br />AT WORK...</h2>
+        <p>Loading responsibilities nobody asked for.</p>
+        <small>PLEASE REMAIN TIRED</small>
+      </div>
+    </div>
+  </Transition>
   <main>
     <header class="shift-nav">
-      <a class="employee-badge" href="#top" aria-label="BurnoutHorse home"><img class="badge-photo" src="/burnout-logo.png" alt="" /><span class="badge-copy"><small>EMPLOYEE #0001</small><strong>BURNOUT<br />HORSE</strong></span><i></i></a>
+      <a class="employee-badge" href="#top" aria-label="BurnoutHorse home"><img class="badge-photo" src="/burnout-logo.png" alt="" /><span class="badge-copy"><small>THE DAILY BURNOUT</small><strong>BURNOUT<br />HORSE</strong></span><i></i></a>
       <button class="menu" aria-label="Open shift menu" @click="menuOpen = !menuOpen"><span>SHIFT MENU</span><i></i></button>
       <nav :class="{ open: menuOpen }" @click="menuOpen = false">
         <span class="nav-label">TODAY'S AGENDA</span>
@@ -39,11 +55,11 @@ onUnmounted(() => clearInterval(galleryTimer))
       </nav>
     </header>
     <section id="top" class="hero">
-      <img class="hero-bg" src="/hero-hoof.png" alt="BurnoutHorse leaving the financial district after work" /><div class="hero-overlay"></div><div class="hero-copy">
-        <h1>BURNOUT<br /><em>HORSE</em></h1><p class="hero-line">He had dreams once.<br />Now he has calendar invites.</p>
+      <img class="hero-bg" src="/hero-afterhours.png" alt="BurnoutHorse slumped on office steps after another long workday" /><HeroAtmosphere /><div class="hero-overlay"></div><div class="hero-copy">
+        <h1><span>BURNOUT</span><br /><em>HORSE</em><small>an overworked original.</small></h1><p class="hero-line">He had dreams once.<br />Now he has calendar invites.</p>
         <div class="hero-bottom"><a class="main-cta" href="#routine">WATCH HIS DAY <span>↓</span></a></div>
       </div>
-      <div class="hero-stamp">MON–FRI<br /><strong>BARELY</strong></div><div class="floating-socials" aria-label="Social links"><span>FIND HIM</span><a href="#" aria-label="X"><img src="/x-logo.svg" alt="" /></a><a href="#" aria-label="Telegram"><img src="/telegram-logo.svg" alt="" /></a></div>
+      <div class="floating-socials" aria-label="Social links"><span>OFF THE CLOCK</span><a href="#" aria-label="X"><img src="/x-logo.svg" alt="" /></a><a href="#" aria-label="Telegram"><img src="/telegram-logo.svg" alt="" /></a></div>
       <div class="hero-ticker"><div><span>WORK • NAP • REPEAT •</span><span>WORK • NAP • REPEAT •</span><span>WORK • NAP • REPEAT •</span></div></div>
     </section>
     <section id="story" class="story"><div class="story-tag">MEET THE EMPLOYEE</div><div class="story-title"><span>01</span><h2>Just a horse.<br />With a <em>job.</em></h2></div><div class="story-copy"><p>BurnoutHorse used to run free. Then someone offered dental insurance and a suspiciously “competitive” salary.</p><p>Now he spends his days answering emails that could have been a nap. He is not a hero. He is us.</p></div><div class="quote">“Can we circle back<br />after my breakdown?”</div></section>
